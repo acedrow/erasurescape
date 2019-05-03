@@ -1,5 +1,6 @@
 package com.example.erasurescape;
 
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
@@ -16,7 +17,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
      Button testButton;
      MediaPlayer mediaPlayer;
-    LinearLayout linearLayout;
+     LinearLayout linearLayout;
 
 
     @Override
@@ -47,11 +48,14 @@ public class MainActivity extends AppCompatActivity {
 
     //creates a word button programatically, should have this in its own class for good CODEZ
     public Button createWordButton(String buttonText){
-        Button button = new Button(this);
+        WordButton wordButton = new WordButton("button", linearLayout, this);
+        /*
+
         button.setText(buttonText);
         button.setLayoutParams(new LinearLayout.LayoutParams
                 (ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
+        button.setBackgroundColor(Color.WHITE);
 
         //set the onclicklistener
         button.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
         if (linearLayout != null){
             linearLayout.addView(button);
         }
-
-        return button;
+        */
+        return wordButton.getButton();
     }
 }
 
