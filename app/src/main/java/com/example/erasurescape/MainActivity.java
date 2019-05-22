@@ -1,35 +1,49 @@
 package com.example.erasurescape;
 
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.Point;
 import android.media.MediaPlayer;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.Display;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-     Button testButton;
-     MediaPlayer mediaPlayer;
-     LinearLayout linearLayout;
-
+    Button testButton;
+    MediaPlayer mediaPlayer;
+    LinearLayout rootVertLayout; //the 'parent' linear layout, holds each horizontal linar layout representing a row of text
+    ArrayList<TextRowLayout> textRow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //instantiate the linearLayout as defined in activity_main.xml
-        linearLayout = findViewById(R.id.rootContainer);
+        textRow = new ArrayList<TextRowLayout>();
+        rootVertLayout = findViewById(R.id.rootVertLayout);
 
-        //try programatically creating button
-        createWordButton("button");
+        String loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                "Aliquam nec aliquam ex. Morbi a vulputate turpis. " +
+                "Pellentesque varius at purus non volutpat. " +
+                "Vestibulum ante ipsum primis in faucibus orci " +
+                "luctus et ultrices posuere cubilia Curae " +
+                "Quisque turpis velit, dignissim eget malesuada nec, " +
+                "blandit vel magna. Donec ornare aliquam porta.";
+
+        Log.i("lorem ipsum length","" + loremIpsum.length());
+
+        TextFormatter.formatText(loremIpsum, getScreenSize());
+
+        //try programatically creating rows and buttons
+        TextRowLayout testRow = createTextRowLayout(rootVertLayout);
+
+        createWordButton("testbutton", testRow);
+        createWordButton("button2", testRow);
 
         //instantiate mediaPlayer
         mediaPlayer = MediaPlayer.create(this, R.raw.pc_says);
@@ -40,40 +54,34 @@ public class MainActivity extends AppCompatActivity {
 
         Paint paint = new Paint();
         String text = "This";
-        float tLength = paint.measureText(text, 0, text.length());
+        float tLength = paint.measureText(loremIpsum);
         Log.i("textLength", "" + tLength);
 
 
     }
 
+    public TextRowLayout createTextRowLayout (LinearLayout textColumnLayout){
+        TextRowLayout textRowLayout = new TextRowLayout(rootVertLayout, this);
+        return textRowLayout;
+    }
+
     //creates a word button programatically, should have this in its own class for good CODEZ
-    public Button createWordButton(String buttonText){
-        WordButton wordButton = new WordButton("button", linearLayout, this);
-        /*
+    public WordButton createWordButton(String buttonText, LinearLayout ll){
+        WordButton wordButton = new WordButton(buttonText, ll, this);
+        return wordButton;
+    }
 
-        button.setText(buttonText);
-        button.setLayoutParams(new LinearLayout.LayoutParams
-                (ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-        button.setBackgroundColor(Color.WHITE);
+    public WordButton createWordButton(String buttonText, TextRowLayout textRowLayout){
+        WordButton wordButton = new WordButton(buttonText, textRowLayout.getLinearLayout(), this);
+        return wordButton;
+    }
 
-        //set the onclicklistener
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //a toast is a small message popup
-                Toast.makeText(MainActivity.this, R.string.welcome_message, Toast.LENGTH_LONG).show();
-                testButton.setText("");
-                mediaPlayer.start();
+    public Point getScreenSize(){
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
 
-            }
-        });
-        //add the button to the linearLayout
-        if (linearLayout != null){
-            linearLayout.addView(button);
-        }
-        */
-        return wordButton.getButton();
+        return size;
     }
 }
 

@@ -13,14 +13,15 @@ public class WordButton {
     String buttonText;
     boolean erased = false;
 
-    public WordButton(final String bt, LinearLayout linearLayout, Context context){
+    public WordButton(final String bt, LinearLayout textRowLayout, Context context){
         button = new Button(context);
-        this.buttonText = bt;
+        buttonText = bt;
         button.setText(bt);
         button.setLayoutParams(new LinearLayout.LayoutParams
                 (ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
         button.setBackgroundColor(Color.WHITE);
+
 
         //set the onclicklistener
         button.setOnClickListener(new View.OnClickListener() {
@@ -30,10 +31,12 @@ public class WordButton {
                 //Toast.makeText(MainActivity.this, R.string.welcome_message, Toast.LENGTH_LONG).show();
                 if (!erased){
                     erased = true;
-                    button.setText("");
+                    //button.setText("");
+                    button.setBackgroundColor(Color.BLACK);
                 } else {
                     erased = false;
-                    button.setText(buttonText);
+                    //button.setText(buttonText);
+                    button.setBackgroundColor(Color.WHITE);
                 }
 
 
@@ -42,8 +45,8 @@ public class WordButton {
             }
         });
         //add the button to the linearLayout
-        if (linearLayout != null){
-            linearLayout.addView(button);
+        if (textRowLayout != null){
+            textRowLayout.addView(button);
         }
     }
 
